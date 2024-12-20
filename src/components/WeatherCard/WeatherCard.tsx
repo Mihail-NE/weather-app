@@ -5,7 +5,7 @@ import CloudIcon from "@/assets/icons/Cloud";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { useWeather } from "@/hooks/useWeather";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import Form from "../Form/Form";
 
 const WeatherCard = () => {
     const [inputValue, setInputValue] = useState("");
@@ -20,24 +20,25 @@ const WeatherCard = () => {
         return <Card className="p-6">Ошибка загрузки данных о погоде</Card>;
     }
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      setCity(inputValue);
-      setInputValue("");
-  };
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setCity(inputValue);
+        setInputValue("");
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
 
     return (
         <Card className="max-w-md mx-auto">
             <CardHeader className="font-bold text-3xl text-center">
                 {data?.current.temp_c}°C
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                    />
-                    <Button type="submit">Найти</Button>
-                </form>
+                <Form
+                    handleSubmit={handleSubmit}
+                    handleChange={handleInputChange}
+                    inputValue={inputValue}
+                />
             </CardHeader>
 
             <CardContent className="flex justify-center">
