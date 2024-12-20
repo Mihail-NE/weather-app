@@ -9,7 +9,9 @@ export interface WeatherResponse {
     wind_kph: number;
     pressure_mb: number;
     humidity: number;
+    cloud: number;
     feelslike_c: number;
+    wind_dir: string;
     uv: number;
   };
   forecast: {

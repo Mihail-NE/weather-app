@@ -6,10 +6,12 @@ import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { useWeather } from "@/hooks/useWeather";
 import { useState } from "react";
 import Form from "../Form/Form";
+import { convertWindSpeed } from "@/lib/utils";
+import BarIcon from "@/assets/icons/Bar";
 
 const WeatherCard = () => {
-    const [inputValue, setInputValue] = useState("");
-    const [city, setCity] = useState("London");
+    const [inputValue, setInputValue] = useState<string>("");
+    const [city, setCity] = useState<string>("London");
     const { data, loading } = useWeather(city);
 
     if (loading) {
@@ -32,30 +34,44 @@ const WeatherCard = () => {
 
     return (
         <Card className="max-w-md mx-auto">
-            <CardHeader className="font-bold text-3xl text-center">
-                {data?.current.temp_c}°C
-                <Form
+            {/* <Form
                     handleSubmit={handleSubmit}
                     handleChange={handleInputChange}
                     inputValue={inputValue}
-                />
+                /> */}
+
+            <CardHeader>
+                <div>
+                    {data?.current.temp_c}°C
+                    <p className="text-base pt-2">
+                        Ощущается как {data?.current.feelslike_c}°C
+                    </p>
+                </div>
+                <div>
+                    <SunIcon size={130} className="text-yellow-400" />
+                </div>
             </CardHeader>
 
-            <CardContent className="flex justify-center">
-                <SunIcon size={90} />
-            </CardContent>
+            <CardTitle>
+                <span className="text-gray-200 flex gap-4">
+                    <DropIcon className="w-6 h-6 text-gray-500" />
+                    {data?.current.humidity}
+                </span>
 
-            <CardTitle className="flex justify-around items-center p-4">
-                <WindIcon className="w-6 h-6 text-gray-500" />
-                <DropIcon className="w-6 h-6 text-gray-500" />
-                <SunIcon className="w-6 h-6 text-gray-500" />
-                <CloudIcon className="w-6 h-6 text-gray-500" />
-            </CardTitle>
+                <span className="text-gray-200 flex gap-4">
+                    <CloudIcon className="w-6 h-6 text-gray-500" />
+                    {data?.current.cloud} %
+                </span>
 
-            <CardTitle className="flex justify-around p-4 text-2xl">
-                <div>{data?.current.wind_kph} km/h</div>
-                <div>{data?.current.humidity}%</div>
-                <div>{data?.current.feelslike_c}°</div>
+                <span className="text-gray-200 flex gap-4">
+                    <WindIcon className="w-6 h-6 text-gray-500" />
+                    {convertWindSpeed(data?.current.wind_kph)} м/с
+                </span>
+
+                <span className="text-gray-200 flex gap-4">
+                    <BarIcon className="w-6 h-6 text-gray-500" />
+                    {data?.current.pressure_mb} мм
+                </span>
             </CardTitle>
 
             <div className="p-4 text-center text-gray-500">
